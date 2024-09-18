@@ -4,6 +4,8 @@ import cors from 'cors'
 import nocache from "nocache";
 import cookieParser from 'cookie-parser'
 import { connectDb } from "./config/dbConfig";
+import userRoutes from './routes/userRoutes'
+import taskRoutes from './routes/taskRoutes'
 
 
 dotenv.config()
@@ -28,6 +30,10 @@ app.use(nocache())
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
+
+app.use('/user', userRoutes)
+
+app.use('/task', taskRoutes)
 
 
 
