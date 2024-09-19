@@ -1,45 +1,87 @@
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import { FC } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { signupSchema } from "../schema/signupSchem";
+import { Tooltip } from "react-tooltip";
+import { useMutation } from "@tanstack/react-query";
+import apiClient from "../utils/axios";
+import { jsonConfig } from "../utils/apiUtils";
 
 interface IinitialState {
-   fullName: string;
-   email:string;
-   password:string;
+   firstName: string;
+   lastName: string;
+   email: string;
+   password: string;
+   confirmPassword: string;
 }
 
 const SignupForm: FC = () => {
-   const initialState:IinitialState = {
-      fullName: "",
+   const initialState: IinitialState = {
+      firstName: "",
+      lastName: "",
       email: "",
-      password:''
+      password: "",
+      confirmPassword: "",
    };
+
+   const navigate = useNavigate();
+
+   const { mutate } = useMutation({
+      mutationFn: async (formData: FormData) => {
+         return (await apiClient.post("/user/signup", formData, jsonConfig)).data;
+      },
+      onSuccess: (data) => {
+         console.log(data);
+         if (data.status == "success") {
+            navigate("/");
+         }
+      },
+   });
    const handleSubmit = (values: IinitialState) => {
-      
+      const formData = new FormData();
+      formData.append("firstName", values.firstName);
+      formData.append("lastName", values.lastName);
+      formData.append("email", values.email);
+      formData.append("password", values.password);
+
+      mutate(formData);
    };
    return (
-      <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0 ">
-         <div className="h-10 w-[600px]">
-            <h1 className="font-bold text-blue-500 text-2xl ">Signup</h1>
+      <div className="flex flex-col items-center justify-center   mx-auto md:h-screen lg:py-0 ">
+         <div className=" w-[600px] mt-20">
+            <h1 className="font-bold text-blue-500 text-2xl">Signup</h1>
          </div>
-         <div className="w-[600px] h-[450px] border-2 border-blue-500 rounded-lg">
+         <div className="w-[600px] h-auto pb-3 mt-2  border-2 border-blue-500 rounded-lg">
             <div className="mt-5">
                <Formik initialValues={initialState} onSubmit={handleSubmit} validationSchema={signupSchema}>
                   <Form>
                      <div className="flex flex-col p-5">
-                        <Field name="fullName" placeholder="Full Name" className="border border-gray-500 h-10 pl-2" />
-                        <ErrorMessage name="fullName" className="text-red-500 h-5" component={"div"} />
+                        <Field name="firstName" placeholder="First Name" className="border border-gray-500 h-10 pl-2" />
+
+                        <ErrorMessage name="firstName" className="text-red-500 h-5" component={"div"} />
+
+                        <Field name="lastName" placeholder="Last Name" className="border border-gray-500 h-10 pl-2 mt-5" />
+                        <ErrorMessage name="lastName" className="text-red-500 h-5" component={"div"} />
 
                         <Field name="email" placeholder="Email" className="border border-gray-500 h-10 pl-2 mt-5" />
                         <ErrorMessage name="email" className="text-red-500 h-5" component={"div"} />
 
                         <Field name="password" type="password" placeholder="Password" className="border border-gray-500 h-10 pl-2 mt-5" />
                         <ErrorMessage name="password" className="text-red-500 h-5" component={"div"} />
+
+                        <Field
+                           name="confirmPassword"
+                           type="password"
+                           placeholder="Confirm Password"
+                           className="border border-gray-500 h-10 pl-2 mt-5"
+                        />
+                        <ErrorMessage name="confirmPassword" className="text-red-500 h-5" component={"div"} />
                      </div>
 
                      <div className="p-5 pt-0">
-                        <button className="bg-blue-500 w-full h-10 text-white">Signup</button>
+                        <button type="submit" className="bg-blue-500 w-full h-10 text-white">
+                           Signup
+                        </button>
                      </div>
 
                      <div className="flex gap-2 justify-center">

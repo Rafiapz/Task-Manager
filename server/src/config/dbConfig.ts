@@ -1,16 +1,12 @@
 import mongoose from "mongoose";
+import { config } from "./config";
 
-const mongoURI = process.env.MONGO_URI
-
-if (!mongoURI) {
-    throw new Error('MongoURI is not defined')
-}
 
 export const connectDb = async () => {
 
     try {
+        await mongoose.connect(`mongodb+srv://${config.mongo.username}:${config.mongo.password}@cluster0.trekfmx.mongodb.net/${config.mongo.database}?retryWrites=true&w=majority`)
 
-        await mongoose.connect(mongoURI)
         console.log('MongoDB connection successful')
 
     } catch (error: any) {
