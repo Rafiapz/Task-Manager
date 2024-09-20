@@ -24,7 +24,7 @@ export const useDeleteTask = () => {
       },
       onError: (error: any) => {
          console.log(error);
-         toast.error(error?.response?.data?.message);
+         toast.error(error?.response?.data?.message || "Network Error");
       },
    });
 };
@@ -43,7 +43,7 @@ export const useEditTask = (closeModal?: any) => {
       },
       onError: (error: any) => {
          console.log(error);
-         toast.error(error?.response?.data?.message);
+         toast.error(error?.response?.data?.message || "Network Error");
       },
    });
 };
@@ -54,7 +54,7 @@ export const useUpdateTaskStatus = () => {
       onSuccess: () => {},
       onError: (error: any) => {
          console.log(error);
-         toast.error(error?.response?.data?.message);
+         toast.error(error?.response?.data?.message || "Network Error");
       },
    });
 };

@@ -33,6 +33,9 @@ export const useUserSignupMutate = () => {
       onSuccess: () => {
          setIsAuthenticated(true);
       },
+      onError: (error: any) => {
+         toast.error(error?.response?.data?.message || "Network Error");
+      },
    });
 };
 
@@ -45,7 +48,6 @@ export const useUserLogin = () => {
          return (await apiClient.post("/user/login", formData, jsonConfig)).data;
       },
       onSuccess: (data) => {
-         toast.success(data?.status);
          query.invalidateQueries({
             queryKey: ["auth"],
          });
@@ -56,7 +58,8 @@ export const useUserLogin = () => {
          }
       },
       onError: (error: any) => {
-         toast.error(error?.response?.data?.message);
+         console.log(error);
+         toast.error(error?.response?.data?.message || "Network Error");
       },
    });
 };
@@ -82,7 +85,7 @@ export const useLoginWithGoogle = () => {
       },
       onError: (error: any) => {
          console.log(error);
-         toast.error(error?.response?.data?.message);
+         toast.error(error?.response?.data?.message || "Network Error");
       },
    });
 };

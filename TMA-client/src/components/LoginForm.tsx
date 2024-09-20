@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import toast from "react-hot-toast";
 import { useLoginWithGoogle, useUserLogin } from "../hooks/useUserHooks";
 import { useGoogleLogin } from "@react-oauth/google";
+import Loading from "./Loading";
 
 interface ILoginForm {
    email: string;
@@ -17,7 +18,7 @@ const LoginForm: FC = () => {
       password: "",
    };
 
-   const { mutate } = useUserLogin();
+   const { mutate, isPending } = useUserLogin();
    const { mutate: googleLogin } = useLoginWithGoogle();
    const handleSubmit = (values: ILoginForm) => {
       const formData = new FormData();
@@ -49,13 +50,17 @@ const LoginForm: FC = () => {
                      <div className="flex flex-col p-5  ">
                         <Field name="email" placeholder="Email" className="border border-gray-500 h-10 pl-2" />
                         <ErrorMessage name="email" className="text-red-500 h-5" component={"div"} />
-                        <Field name="password" placeholder="Password" className="border border-gray-500 h-10 pl-2 mt-5" />
+                        <Field name="password" type="password" placeholder="Password" className="border border-gray-500 h-10 pl-2 mt-5" />
                         <ErrorMessage name="email" className="text-red-500" component={"div"} />
                      </div>
                      <div className=" p-5 pt-0 ">
-                        <button type="submit" className="bg-blue-500 w-full h-10 text-white">
-                           Login
-                        </button>
+                        {isPending ? (
+                           <Loading />
+                        ) : (
+                           <button type="submit" className="bg-blue-500 w-full h-10 text-white">
+                              Login
+                           </button>
+                        )}
                      </div>
                      <div className="flex gap-2 justify-center">
                         <p>Don't have an account?</p>
