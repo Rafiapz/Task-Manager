@@ -6,6 +6,7 @@ import cookieParser from 'cookie-parser'
 import { connectDb } from "./config/dbConfig";
 import userRoutes from './routes/userRoutes'
 import taskRoutes from './routes/taskRoutes'
+import { Request, Response } from 'express'
 
 
 dotenv.config()
@@ -35,7 +36,9 @@ app.use('/user', userRoutes)
 
 app.use('/task', taskRoutes)
 
-
+app.use((req: Request, res: Response) => {
+    res.status(404).json({ message: 'Not found' })
+})
 
 app.listen(port, () => {
     console.log(`server running on the port ${port}`);
