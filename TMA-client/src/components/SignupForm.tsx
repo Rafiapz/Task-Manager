@@ -8,6 +8,7 @@ import { jsonConfig } from "../utils/apiUtils";
 import { useLoginWithGoogle } from "../hooks/useUserHooks";
 import toast from "react-hot-toast";
 import { useGoogleLogin } from "@react-oauth/google";
+import Loading from "./Loading";
 
 interface IinitialState {
    firstName: string;
@@ -49,7 +50,7 @@ const SignupForm: FC = () => {
       mutate(formData);
    };
 
-   const { mutate: googleLogin } = useLoginWithGoogle();
+   const { mutate: googleLogin, isPending: googleLoading } = useLoginWithGoogle();
    const handleGoogleLoginSuccess = (tokenResponse: any) => {
       const accessToken = tokenResponse.access_token;
       googleLogin(accessToken);
@@ -106,10 +107,14 @@ const SignupForm: FC = () => {
                      </div>
                   </Form>
                </Formik>
-               <div className="flex justify-center">
-                  <button onClick={() => googleAuth()} className="bg-blue-500 mt-5 text-white w-44 h-10 rounded-lg">
-                     Signup with Google
-                  </button>
+               <div className="flex justify-center p-1">
+                  {googleLoading ? (
+                     <Loading width={"w-44"} />
+                  ) : (
+                     <button onClick={() => googleAuth()} className="bg-blue-500  text-white w-44 h-10 rounded-lg">
+                        Login with Google
+                     </button>
+                  )}
                </div>
             </div>
          </div>

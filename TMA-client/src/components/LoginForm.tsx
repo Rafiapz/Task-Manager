@@ -18,8 +18,8 @@ const LoginForm: FC = () => {
       password: "",
    };
 
-   const { mutate, isPending } = useUserLogin();
-   const { mutate: googleLogin } = useLoginWithGoogle();
+   const { mutate, isPending: loginLoading } = useUserLogin();
+   const { mutate: googleLogin, isPending: googleLoading } = useLoginWithGoogle();
    const handleSubmit = (values: ILoginForm) => {
       const formData = new FormData();
       formData.append("email", values?.email);
@@ -51,11 +51,11 @@ const LoginForm: FC = () => {
                         <Field name="email" placeholder="Email" className="border border-gray-500 h-10 pl-2" />
                         <ErrorMessage name="email" className="text-red-500 h-5" component={"div"} />
                         <Field name="password" type="password" placeholder="Password" className="border border-gray-500 h-10 pl-2 mt-5" />
-                        <ErrorMessage name="email" className="text-red-500" component={"div"} />
+                        <ErrorMessage name="password" className="text-red-500" component={"div"} />
                      </div>
                      <div className=" p-5 pt-0 ">
-                        {isPending ? (
-                           <Loading />
+                        {loginLoading ? (
+                           <Loading width={"w-full"} />
                         ) : (
                            <button type="submit" className="bg-blue-500 w-full h-10 text-white">
                               Login
@@ -70,10 +70,14 @@ const LoginForm: FC = () => {
                      </div>
                   </Form>
                </Formik>
-               <div className="flex justify-center">
-                  <button onClick={() => googleAuth()} className="bg-blue-500 mt-5 text-white w-44 h-10 rounded-lg">
-                     Login with Google
-                  </button>
+               <div className="flex justify-center pt-5">
+                  {googleLoading ? (
+                     <Loading width={"w-44"} />
+                  ) : (
+                     <button onClick={() => googleAuth()} className="bg-blue-500  text-white w-44 h-10 rounded-lg">
+                        Login with Google
+                     </button>
+                  )}
                </div>
             </div>
          </div>

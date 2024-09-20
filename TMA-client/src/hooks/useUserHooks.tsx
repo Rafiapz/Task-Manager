@@ -73,7 +73,6 @@ export const useLoginWithGoogle = () => {
          return (await apiClient.post("/user/login-with-google", { googleAccesToken: accessToken }, jsonConfig)).data;
       },
       onSuccess: (data) => {
-         toast.success(data?.status);
          query.invalidateQueries({
             queryKey: ["auth"],
          });

@@ -42,7 +42,10 @@ const ModalAddTask: FC<any> = ({ isModalOpen, toggleModal }) => {
    return (
       <>
          {isModalOpen && (
-            <div aria-hidden="true" className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto overflow-x-hidden">
+            <div
+               aria-hidden="true"
+               className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 overflow-y-auto overflow-x-hidden"
+            >
                <div className="relative p-4 w-full max-w-md max-h-full">
                   <div className="relative bg-white rounded-lg shadow border-2 border-blue-500 text-black">
                      <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
