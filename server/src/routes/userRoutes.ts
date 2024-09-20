@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { fetchUser, loginController, logoutController, signupController } from '../controller/userController'
+import { fetchUser, loginController, loginWithGoogleController, logoutController, signupController } from '../controller/userController'
 import { authMiddleware } from '../middleware/userMiddleware'
 
 const router = Router()
@@ -7,6 +7,8 @@ const router = Router()
 router.route('/signup').post(signupController)
 
 router.route('/login').post(loginController)
+
+router.route('/login-with-google').post(loginWithGoogleController)
 
 router.route('/logout').get(logoutController)
 

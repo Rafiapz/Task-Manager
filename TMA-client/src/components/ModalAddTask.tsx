@@ -4,7 +4,6 @@ import { taskSchema } from "../schema/taskSchema";
 import { QueryClient, useMutation, useQueryClient } from "@tanstack/react-query";
 import { addTask } from "../api/taskApi";
 import toast from "react-hot-toast";
-import { AxiosError } from "axios";
 
 interface ITaskInitialValues {
    title: string;
@@ -33,7 +32,7 @@ const ModalAddTask: FC<any> = ({ isModalOpen, toggleModal }) => {
       },
    });
 
-   const handleSubmit = (values: ITaskInitialValues, { resetForm }: any) => {
+   const handleSubmit = (values: ITaskInitialValues) => {
       const formData = new FormData();
       formData.append("title", values?.title);
       formData.append("description", values?.description);
@@ -43,11 +42,7 @@ const ModalAddTask: FC<any> = ({ isModalOpen, toggleModal }) => {
    return (
       <>
          {isModalOpen && (
-            <div
-               id="authentication-modal"
-               aria-hidden="true"
-               className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto overflow-x-hidden"
-            >
+            <div aria-hidden="true" className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto overflow-x-hidden">
                <div className="relative p-4 w-full max-w-md max-h-full">
                   <div className="relative bg-white rounded-lg shadow border-2 border-blue-500 text-black">
                      <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">

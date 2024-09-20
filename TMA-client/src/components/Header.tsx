@@ -10,7 +10,6 @@ const Header: FC = () => {
    const query: QueryClient = useQueryClient();
    const userData: any = query.getQueryData(["auth"]);
 
-   console.log(userData);
 
    const navigate = useNavigate();
 

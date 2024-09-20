@@ -1,27 +1,28 @@
 import { useState } from "react";
 import ModalAddTask from "../../components/ModalAddTask";
-import Draggable from "react-draggable";
 import TaskSection from "../../components/TaskSection";
+import ModalEditTask from "../../components/ModalEditTask";
+import SearchAndSort from "../../components/SearchAndSort";
 
 const HomePage = () => {
-   const [isModalOpen, setIsModalOpen] = useState(false);
-
-   const toggleModal = () => {
-      setIsModalOpen(!isModalOpen);
+   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+   const [sort, setSort] = useState<number>(-1);
+   const [query, setQuery] = useState<string | null>(null);
+   const toggleAddModal = () => {
+      setIsAddModalOpen(!isAddModalOpen);
    };
+
    return (
       <div className=" pt-32 pl-16 pr-18 ">
          <div className="">
-            <button onClick={toggleModal} className="bg-blue-500 hover:bg-blue-700 text-white  py-2 px-20 rounded-lg ">
+            <button onClick={toggleAddModal} className="bg-blue-500 hover:bg-blue-700 text-white  py-2 px-20 rounded-lg ">
                Add Task
             </button>
          </div>
-         <ModalAddTask isModalOpen={isModalOpen} toggleModal={toggleModal} />
-         <TaskSection />
-
-         {/* <Draggable>
-            <div className="border-2 border-blue-500 h-auto w-32">I can now be moved around!</div>
-         </Draggable> */}
+         <SearchAndSort sort={sort} setSort={setSort} query={query} setQuery={setQuery} />
+         <ModalAddTask isModalOpen={isAddModalOpen} toggleModal={toggleAddModal} />
+         <ModalEditTask />
+         <TaskSection sort={sort} query={query} setSort={setSort} />
       </div>
    );
 };

@@ -2,10 +2,12 @@ import { ErrorMessage, Field, Form, Formik } from "formik";
 import { FC } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { signupSchema } from "../schema/signupSchem";
-import { Tooltip } from "react-tooltip";
 import { useMutation } from "@tanstack/react-query";
 import apiClient from "../utils/axios";
 import { jsonConfig } from "../utils/apiUtils";
+import { useLoginWithGoogle } from "../hooks/useUserHooks";
+import toast from "react-hot-toast";
+import { useGoogleLogin } from "@react-oauth/google";
 
 interface IinitialState {
    firstName: string;
@@ -46,6 +48,18 @@ const SignupForm: FC = () => {
 
       mutate(formData);
    };
+
+   const { mutate: googleLogin } = useLoginWithGoogle();
+   const handleGoogleLoginSuccess = (tokenResponse: any) => {
+      const accessToken = tokenResponse.access_token;
+      googleLogin(accessToken);
+   };
+
+   const handleGoogleLoginError = (error: any) => {
+      toast(error.message);
+   };
+
+   const googleAuth = useGoogleLogin({ onSuccess: handleGoogleLoginSuccess, onError: handleGoogleLoginError });
    return (
       <div className="flex flex-col items-center justify-center   mx-auto md:h-screen lg:py-0 ">
          <div className=" w-[600px] mt-20">
@@ -90,12 +104,13 @@ const SignupForm: FC = () => {
                            Login
                         </Link>
                      </div>
-
-                     <div className="flex justify-center">
-                        <button className="bg-blue-500 mt-5 text-white w-44 h-10 rounded-lg">Signup with Google</button>
-                     </div>
                   </Form>
                </Formik>
+               <div className="flex justify-center">
+                  <button onClick={() => googleAuth()} className="bg-blue-500 mt-5 text-white w-44 h-10 rounded-lg">
+                     Signup with Google
+                  </button>
+               </div>
             </div>
          </div>
       </div>

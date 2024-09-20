@@ -19,7 +19,6 @@ export const addTaskController = async (req: Request, res: Response) => {
         res.status(200).json({ status: 'success', data: result })
 
     } catch (error: any) {
-        console.log(error)
         if (error?.code === 11000) {
             res.status(500).json({ status: 'error', message: 'The title you entered is already in use. Please choose a different title' })
             return
@@ -31,13 +30,21 @@ export const addTaskController = async (req: Request, res: Response) => {
 export const fetchAllTaskController = async (req: Request, res: Response) => {
 
     try {
+        let sort: any = req?.params?.sort
+        sort = Number(sort)
+        const query = req?.query?.search
 
-        const data = await Tasks.find({ userId: req?.user?._id })
+        if (query) {
+            const regx = new RegExp(`^${query}`, "i")
+            const data = await Tasks.find({ userId: req?.user?._id, title: { $regex: regx } }).sort({ createdAt: sort })
+            res.status(200).json({ status: 'success', data })
+        } else {
+            const data = await Tasks.find({ userId: req?.user?._id }).sort({ createdAt: sort })
+            res.status(200).json({ status: 'success', data })
+        }
 
-        res.status(200).json({ status: 'success', data })
 
     } catch (error: any) {
-        console.log(error)
         res.status(500).json({ status: 'error', message: error?.message })
     }
 }
@@ -46,12 +53,22 @@ export const deleteTaskController = async (req: Request, res: Response) => {
     try {
 
         const id = req?.params?.id
-        const result = await Tasks.deleteOne({ _id: id })
-        console.log(result, '==result')
+        await Tasks.deleteOne({ _id: id })
         res.status(200).json({ status: 'success' })
 
     } catch (error: any) {
-        console.log(error)
+        res.status(500).json({ status: 'error', message: error?.message })
+    }
+}
+
+export const editTaskController = async (req: Request, res: Response) => {
+    try {
+
+        const id = req?.params?.id
+        await Tasks.updateOne({ _id: id }, { $set: req?.body })
+        res.status(200).json({ status: 'success' })
+
+    } catch (error: any) {
         res.status(500).json({ status: 'error', message: error?.message })
     }
 }

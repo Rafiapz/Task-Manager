@@ -1,22 +1,11 @@
-import { FC } from "react";
-
-import { Navigate, useNavigate } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
-import apiClient from "../utils/axios";
-import { useUserFetch } from "../hooks/useUserHooks";
+import { Navigate } from "react-router-dom";
+import { QueryClient, useQueryClient } from "@tanstack/react-query";
 
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-   const { data, isLoading, isError } = useUserFetch();
+   const query: QueryClient = useQueryClient();
+   const userData: any = query.getQueryData(["auth"]);
 
-   if (isLoading) {
-      return <div>Loading...</div>;
-   }
-
-   if (isError) {
-      return <Navigate to="/login" replace />;
-   }
-
-   if (!data?.isAuthenticated) {
+   if (!userData?.isAuthenticated) {
       return <Navigate to="/login" replace />;
    }
 
