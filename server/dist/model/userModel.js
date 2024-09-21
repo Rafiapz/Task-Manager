@@ -28,7 +28,7 @@ const UsersSchema = new mongoose_1.Schema({
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     firstName: { type: String, required: true },
-    lastName: { type: String, required: true },
+    lastName: { type: String },
 });
 const Users = mongoose_1.default.model('Users', UsersSchema);
 exports.default = Users;

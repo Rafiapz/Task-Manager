@@ -43,6 +43,7 @@ const signupController = (req, res) => __awaiter(void 0, void 0, void 0, functio
 exports.signupController = signupController;
 const loginController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        console.log(req === null || req === void 0 ? void 0 : req.body);
         const { value, error } = loginValidation_1.loginValidation.validate(req === null || req === void 0 ? void 0 : req.body);
         if (error) {
             throw new Error(error === null || error === void 0 ? void 0 : error.message);
@@ -62,7 +63,8 @@ const loginController = (req, res) => __awaiter(void 0, void 0, void 0, function
         res.status(200).json({ status: 'success' });
     }
     catch (error) {
-        res.status(500).json({ status: 'error', message: error === null || error === void 0 ? void 0 : error.message });
+        console.log(error);
+        res.status(error === null || error === void 0 ? void 0 : error.code).json({ status: 'error', message: error === null || error === void 0 ? void 0 : error.message });
     }
 });
 exports.loginController = loginController;
@@ -85,8 +87,7 @@ const loginWithGoogleController = (req, res) => __awaiter(void 0, void 0, void 0
             else {
                 const googleData = response.data;
                 const userData = {
-                    firstName: googleData.firstName,
-                    lastName: googleData.lastName,
+                    firstName: googleData.name,
                     email: googleData.email,
                     password: googleData.sub,
                 };

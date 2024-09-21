@@ -34,7 +34,7 @@ export const signupController = async (req: Request, res: Response) => {
 export const loginController = async (req: Request, res: Response) => {
 
     try {
-
+        console.log(req?.body)
         const { value, error } = loginValidation.validate(req?.body)
 
         if (error) {
@@ -58,7 +58,8 @@ export const loginController = async (req: Request, res: Response) => {
         res.cookie('userToken', token, { maxAge: 1000 * 60 * 60 * 24, httpOnly: true, sameSite: "none", secure: true })
         res.status(200).json({ status: 'success' })
     } catch (error: any) {
-        res.status(500).json({ status: 'error', message: error?.message })
+        console.log(error)
+        res.status(error?.code).json({ status: 'error', message: error?.message })
     }
 }
 
@@ -85,8 +86,7 @@ export const loginWithGoogleController = async (req: Request, res: Response) => 
             } else {
                 const googleData = response.data
                 const userData: IUsers = {
-                    firstName: googleData.firstName,
-                    lastName: googleData.lastName,
+                    firstName: googleData.name,
                     email: googleData.email,
                     password: googleData.sub,
                 }
